@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<students>
+    <student>
+        <studSurname>Василий</studSurname>
+        <studFirName>Курочкин</studFirName>
+        <studSecName>Петрович</studSecName>
+
+        <dadSurName>Петр</dadSurName>
+        <dadFirNam>Курочкин</dadFirNam>
+        <dadSecName>Григорьевич</dadSecName>
+        <dadSalary>6000</dadSalary>
+
+        <mumSurName>Елена</mumSurName>
+        <mumFirName>Курочкина</mumFirName>
+        <mumSecName>Сергеевна</mumSecName>
+        <mumSalary>7000</mumSalary>
+
+        <brotherCount>3</brotherCount>
+        <sisterCount>4</sisterCount>
+
+    </student>
+</students>
+
