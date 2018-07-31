@@ -1,5 +1,6 @@
 package com.company.Model;
 
+import javax.print.DocFlavor;
 import java.util.ArrayList;
 
 /**
@@ -25,15 +26,26 @@ public class Student {
         this.sisterNum = sistNum;
     }
 
+    public Student(){
+        this.father=new Parent();
+        this.mother=new Parent();
+    }
+
     public String getSurName(){return surName;}
     public String getFirstName(){return firstName;}
     public String getSecondName(){return secondName;}
-    public String getFullName(){
-        return (surName + firstName + secondName);
-    }
     public int getBrotherNum(){return brotherNum;}
     public int getSisterNum(){return sisterNum;}
 
     public Parent getMother(){return mother;}
     public Parent getFather(){return father;}
+
+    public void setSurName(String surName){this.surName = surName;}
+    public void setFirstName(String firstName){ this.firstName= firstName;}
+    public void setSecondName(String secondName){this.secondName= secondName;}
+    public void setBrotherNum(int brotherNum){this.brotherNum=brotherNum;}
+    public void setSisterNum(int sisterNum){this.sisterNum = sisterNum;}
+
+    public void setMother(Parent mom){mother=mom;}
+    public void setFather(Parent dad){father = dad;}
 }

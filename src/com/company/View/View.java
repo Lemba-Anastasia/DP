@@ -35,6 +35,7 @@ public class View {
 
     }
     public Table getTablePanel(){ return  tablePanel;}
+    public void updateData(){ tablePanel.updateTable();}
     public Graphics getFramesGraphics(){ return  frame.getGraphics();}
     public Table getTabl(){ return  tablePanel;}
 }

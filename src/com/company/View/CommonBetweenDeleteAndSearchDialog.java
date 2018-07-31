@@ -11,10 +11,10 @@ import java.util.ArrayList;
  * Created by Lemba on 19.05.2018.
  */
 public class CommonBetweenDeleteAndSearchDialog {
-    JButton buttonByName;
-    JButton buttonByNameParents;
-    JButton buttonByCountBrotherandSisters;
-    JButton buttonByParentsSalary;
+    private JButton buttonByName;
+    private JButton buttonByNameParents;
+    private JButton buttonByCountBrotherandSisters;
+    private JButton buttonByParentsSalary;
     private int x=20;
     private int higthAligment=20;
     private TextField firstData, secondData, thirdData;
@@ -110,10 +110,6 @@ public class CommonBetweenDeleteAndSearchDialog {
         tempDialog.update(tempDialog.getGraphics());
         actionButton.addActionListener(actionForButton);
     }
-    /*private void returnTostartPositionTable(){
-        table.setStudents(copyMainStudentList);
-        table.updateTable();
-    }*/
 
     public void removeElements(JDialog tempDialog) {
         tempDialog.remove(jLabelFrom);
@@ -128,6 +124,19 @@ public class CommonBetweenDeleteAndSearchDialog {
         if(totalAcionListener!=null)
             actionButton.removeActionListener(totalAcionListener);
     }
+
+    public String getFirstData() {
+        return firstData.getText();
+    }
+
+    public String getSecondData() {
+        return secondData.getText();
+    }
+
+    public String getThirdData() {
+        return thirdData.getText();
+    }
+
     public JButton getFindByName() {
         return buttonByName;
     }

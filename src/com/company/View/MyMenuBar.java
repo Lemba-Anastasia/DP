@@ -2,8 +2,8 @@ package com.company.View;
 
 import com.company.Controller.MainController;
 import com.company.Controller.Parser;
-import com.company.Main;
 import com.company.Model.DataBase;
+
 
 import javax.swing.*;
 import java.awt.event.ActionEvent;
@@ -13,7 +13,6 @@ import java.awt.event.ActionListener;
  * Created by Lemba on 08.05.2018.
  */
 public class MyMenuBar {
-    private DataBase dataBase;
     private JMenuBar menuBar;
     private MainController controller;
     private Parser theParser;
@@ -24,15 +23,13 @@ public class MyMenuBar {
     private JMenuItem addStudentTool;
     private JMenuItem deleteStudentTool;
     private JMenuItem searchStudentTool;
-    private Table table;
+
 
     public MyMenuBar(DataBase dataBase, final View view, Table table){
 
-        this.table=table;
         this.controller=new MainController(dataBase);
         theParser = new Parser(dataBase,table);
 
-        this.dataBase = dataBase;
         menuBar = new JMenuBar();
 
         fileMenu = new JMenu("Файл");
@@ -55,13 +52,13 @@ public class MyMenuBar {
         saveFile.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                theParser.saveFile();
+                theParser.saveFile2();
             }
         });
         openFile.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                theParser.openFile();
+                theParser.openFile2();
             }
         });
 
@@ -78,13 +75,16 @@ public class MyMenuBar {
         deleteStudentTool.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-
+                JDialog add = new DeleteStudentDialog(controller,view).getDialog();
+                add.setSize(330,500);
+                add.setVisible(true);
+                add.setLocationRelativeTo(null);
             }
         });
         searchStudentTool.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                JDialog add = new SearchStudentDialog(controller).getDialog();
+                JDialog add = new SearchStudentDialog(controller).getSeachDialog();
                 add.setSize(555,500);
                 add.setVisible(true);
                 add.setLocationRelativeTo(null);

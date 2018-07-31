@@ -31,12 +31,10 @@ public class AddDialog {
     private JTextField mumSalary;
     private JTextField numOfBrothers;
     private JTextField numOfSisters;
-    private Table table;
     private View view;
 
-    public AddDialog(final MainController addController, View view){
+    public AddDialog(final MainController addController, final View view){
         this.view= view;
-        table = view.getTablePanel() ;
         dialog = new JDialog();
 
         Box studentForm = Box.createVerticalBox();
@@ -47,7 +45,7 @@ public class AddDialog {
         numOfSisters = new JTextField();
         numOfSisters.setBorder(new TitledBorder("Кол-во сестер"));
 
-        JButton addButton = new JButton("OK");
+        JButton addButton = new JButton("Добавить");
         addButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -58,7 +56,7 @@ public class AddDialog {
                         getBrotherNum(),getSisterNum(),
                         addController.getDataBase());
 
-                table.updateTable();
+                view.updateData();
 
             }
         });

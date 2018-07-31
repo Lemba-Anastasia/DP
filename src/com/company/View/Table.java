@@ -52,6 +52,20 @@ public class Table extends JPanel {
 
     private JPanel makeTableToolBar(){
         JPanel panelToolBar = new JPanel();
+        JLabel jlab = new JLabel("  Cтрок на странице:");
+        panelToolBar.add(jlab);
+        String[] numberDisplayingStudents = {"10", "20", "30"};
+        final JComboBox<String> checkNumberToDisplay = new JComboBox<>(numberDisplayingStudents);
+        checkNumberToDisplay.setSelectedIndex(Arrays.asList(numberDisplayingStudents).indexOf(Integer.toString(countStudOnPage)));
+        checkNumberToDisplay.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                countStudOnPage = Integer.parseInt(checkNumberToDisplay.getSelectedItem().toString());
+                updateTable();
+            }
+        });
+        panelToolBar.add(checkNumberToDisplay);
+
         JButton firstPageButton = new JButton(new ImageIcon("src\\com\\company\\images\\doublebackward.jpg"));
         panelToolBar.add(firstPageButton);
 
@@ -107,20 +121,14 @@ public class Table extends JPanel {
                 updateTable();
             }
         });
+        int list;
+        if(currentPage!=getNumberofMaxPage()){list= countStudOnPage*currentPage;}
+        else{list = studentsList.size()-(getNumberofMaxPage()-1)*countStudOnPage;}
 
-        JLabel jlab = new JLabel("  Cтрок на странице:");
-        panelToolBar.add(jlab);
-        String[] numberDisplayingStudents = {"10", "20", "30"};
-        final JComboBox<String> checkNumberToDisplay = new JComboBox<>(numberDisplayingStudents);
-        checkNumberToDisplay.setSelectedIndex(Arrays.asList(numberDisplayingStudents).indexOf(Integer.toString(countStudOnPage)));
-        checkNumberToDisplay.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                    countStudOnPage = Integer.parseInt(checkNumberToDisplay.getSelectedItem().toString());
-                    updateTable();
-            }
-        });
-        panelToolBar.add(checkNumberToDisplay);
+        JLabel info = new JLabel("Записей: "+ list+"/"+studentsList.size());
+        info.setSize(50,30);
+        panelToolBar.add(info);
+
         return panelToolBar;
     }
 

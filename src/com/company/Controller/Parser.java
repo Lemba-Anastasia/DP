@@ -1,150 +1,254 @@
 package com.company.Controller;
 
+
 import com.company.Model.DataBase;
 import com.company.Model.Parent;
 import com.company.Model.Student;
 import com.company.View.Table;
+import org.w3c.dom.Document;
+import org.w3c.dom.Element;
+import org.xml.sax.Attributes;
+import org.xml.sax.SAXException;
+import org.xml.sax.helpers.DefaultHandler;
 
 import javax.swing.*;
 import javax.swing.filechooser.FileNameExtensionFilter;
-import javax.xml.stream.XMLInputFactory;
-import javax.xml.stream.XMLOutputFactory;
-import javax.xml.stream.XMLStreamReader;
-import javax.xml.stream.XMLStreamWriter;
-import java.io.FileInputStream;
-import java.io.FileWriter;
+import javax.xml.parsers.*;
+import javax.xml.transform.Transformer;
+import javax.xml.transform.TransformerException;
+import javax.xml.transform.TransformerFactory;
+import javax.xml.transform.dom.DOMSource;
+import javax.xml.transform.stream.StreamResult;
+import java.io.File;
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Objects;
 
-/**
- * Created by Lemba on 18.05.2018.
- */
 public class Parser {
     private DataBase dataBase;
     private Table table;
+    private Student tempStudent;
+    private String tempData;
+    private Parent dad,mom;
+
+
     public Parser(DataBase dataBase, Table table){
         this.table = table;
         this.dataBase=dataBase;
+        tempStudent=new Student();
+        tempData="";
+
     }
 
-    public void saveFile(){
-        try{
-            JFileChooser fSave = new JFileChooser();
-            if (fSave.showSaveDialog(null) == JFileChooser.APPROVE_OPTION){
-                XMLOutputFactory output = XMLOutputFactory.newInstance();
-                XMLStreamWriter writer = output.createXMLStreamWriter(new FileWriter(fSave.getSelectedFile() + "." + "xml"));
-                writer.writeStartDocument("UTF-8", "1.0");
 
-                writer.writeStartElement("students");
+    public void saveFile2(){
+        List<Student> studentArrayList = dataBase.studentsList;
+        try
+        {
+            DocumentBuilderFactory documentBuilderFactory = DocumentBuilderFactory.newInstance();
+            DocumentBuilder documentBuilder = documentBuilderFactory.newDocumentBuilder();
 
-                for (int i = 0; i < dataBase.getStudents().size(); i++){
-                    writer.writeStartElement("student");
+            Document document = documentBuilder.newDocument();
+            Element students = document.createElement("students");
+            document.appendChild(students);
+            for(Student stud:studentArrayList) {
+                Element student = document.createElement("student");
+                students.appendChild(student);
 
-                    writer.writeAttribute(ParserConsts.STUDSURNAME, dataBase.getStudentByIndex(i).getSurName());
-                    writer.writeAttribute(ParserConsts.STUDFNAME, dataBase.getStudentByIndex(i).getFirstName());
-                    writer.writeAttribute(ParserConsts.STUDSNAME, dataBase.getStudentByIndex(i).getSecondName());
+                Element surName = document.createElement("surName");
+                surName.appendChild(document.createTextNode(stud.getSurName()));
+                student.appendChild(surName);
 
-                    writer.writeAttribute(ParserConsts.DADSURNAME, dataBase.getStudentByIndex(i).getFather().getSurName());
-                    writer.writeAttribute(ParserConsts.DADFNAME, dataBase.getStudentByIndex(i).getFather().getFirstName());
-                    writer.writeAttribute(ParserConsts.DADSNAME, dataBase.getStudentByIndex(i).getFather().getSecondName());
-                    writer.writeAttribute(ParserConsts.DADSALARY, String.valueOf(dataBase.getStudentByIndex(i).getFather().getSalary()));
+                Element firstName = document.createElement("firstName");
+                firstName.appendChild(document.createTextNode(stud.getFirstName()));
+                student.appendChild(firstName);
 
-                    writer.writeAttribute(ParserConsts.MUMSURNAME, dataBase.getStudentByIndex(i).getMother().getSurName());
-                    writer.writeAttribute(ParserConsts.MUMFNAME, dataBase.getStudentByIndex(i).getMother().getFirstName());
-                    writer.writeAttribute(ParserConsts.MUMSNAME, dataBase.getStudentByIndex(i).getMother().getSecondName());
-                    writer.writeAttribute(ParserConsts.MUMSALARY, String.valueOf(dataBase.getStudentByIndex(i).getMother().getSalary()));
+                Element secName = document.createElement("secName");
+                secName.appendChild(document.createTextNode(stud.getSecondName()));
+                student.appendChild(secName);
 
-                    writer.writeAttribute(ParserConsts.BROTHNUM, String.valueOf(dataBase.getStudentByIndex(i).getBrotherNum()));
-                    writer.writeAttribute(ParserConsts.SISTNUM, String.valueOf(dataBase.getStudentByIndex(i).getSisterNum()));
+                Element dad = document.createElement("dad");
+                student.appendChild(dad);
 
-                    writer.writeEndElement();
-                }
-                writer.writeEndElement();
-                writer.writeEndDocument();
-                writer.flush();
+                Element dadSurName = document.createElement("dadSurName");
+                dadSurName.appendChild(document.createTextNode(stud.getFather().getSurName()));
+                student.appendChild(dadSurName);
+
+                Element dadFirstName = document.createElement("dadFirstName");
+                dadFirstName.appendChild(document.createTextNode(stud.getFather().getFirstName()));
+                student.appendChild(dadFirstName);
+
+                Element dadSecName = document.createElement("dadSecName");
+                dadSecName.appendChild(document.createTextNode(stud.getFather().getSecondName()));
+                student.appendChild(dadSecName);
+
+                Element dadSalary = document.createElement("dadSalary");
+                dadSalary.appendChild(document.createTextNode(String.valueOf(stud.getFather().getSalary())));
+                student.appendChild(dadSalary);
+
+                Element mom = document.createElement("mom");
+                student.appendChild(mom);
+
+                Element momSurName = document.createElement("momSurName");
+                momSurName.appendChild(document.createTextNode(stud.getMother().getSurName()));
+                student.appendChild(momSurName);
+
+                Element momFirstName = document.createElement("momFirstName");
+                momFirstName.appendChild(document.createTextNode(stud.getMother().getFirstName()));
+                student.appendChild(momFirstName);
+
+                Element momSecName = document.createElement("momSecName");
+                momSecName.appendChild(document.createTextNode(stud.getMother().getSecondName()));
+                student.appendChild(momSecName);
+
+                Element momSalary = document.createElement("momSalary");
+                momSalary.appendChild(document.createTextNode(String.valueOf(stud.getMother().getSalary())));
+                student.appendChild(momSalary);
+
+                Element countBrothers = document.createElement("countOfBrothers");
+                countBrothers.appendChild(document.createTextNode(String.valueOf(stud.getBrotherNum())));
+                student.appendChild(countBrothers);
+
+                Element countSisters = document.createElement("countOfSisters");
+                countSisters.appendChild(document.createTextNode(String.valueOf(stud.getSisterNum())));
+                student.appendChild(countSisters);
+
             }
-
-        }catch( Exception e){
-            JOptionPane.showMessageDialog(null, "Почему-то невозможно сохранить файл");
+            TransformerFactory transformerFactory = TransformerFactory.newInstance();
+            Transformer transformer = transformerFactory.newTransformer();
+            DOMSource domSource = new DOMSource(document);
+            JFileChooser jf = new JFileChooser();
+            String fileName = null;
+            int result = jf.showSaveDialog(null);
+            if (result == JFileChooser.APPROVE_OPTION) {
+                fileName = jf.getSelectedFile().getAbsolutePath();
+            }
+            StreamResult streamResult = new StreamResult(new File(fileName));
+            transformer.transform(domSource, streamResult);
+        }
+        catch (ParserConfigurationException pce)
+        {
+            System.out.println(pce.getLocalizedMessage());
+            pce.printStackTrace();
+        }
+        catch (TransformerException te)
+        {
+            System.out.println(te.getLocalizedMessage());
+            te.printStackTrace();
         }
     }
 
-    public void openFile(){
-        try{
-            JFileChooser fOpen = new JFileChooser();
-            fOpen.setFileFilter(new FileNameExtensionFilter(".xml", "xml"));
-            if (fOpen.showOpenDialog(null) == JFileChooser.APPROVE_OPTION) {
-                String fileName = fOpen.getSelectedFile().getPath();
+    public void openFile2(){
+        dataBase.removeStudents(dataBase.studentsList);
+        JFileChooser fOpen = new JFileChooser();
+        fOpen.setFileFilter(new FileNameExtensionFilter(".xml", "xml"));
+        if (fOpen.showOpenDialog(null) == JFileChooser.APPROVE_OPTION) {
+            String fileName = fOpen.getSelectedFile().getPath();
 
-                String studSurname = "";
-                String studFirName = "";
-                String studSecName = "";
-                String dadSurname = "";
-                String dadFirName = "";
-                String dadSecName = "";
-                String dadSalary = "";
-                String mumSurname = "";
-                String mumFirName = "";
-                String mumSecName = "";
-                String mumSalary = "";
-                String brotherNum = "";
-                String sisterNum = "";
-                dataBase.getStudents().clear();
+            try {
+                SAXParserFactory factory = SAXParserFactory.newInstance();
+                final SAXParser saxParser = factory.newSAXParser();
 
-                table.updateTable();////////////////
-                XMLStreamReader xmlReader = XMLInputFactory.newInstance()
-                        .createXMLStreamReader(fileName, new FileInputStream(fileName));
-                while (xmlReader.hasNext()){
-                    xmlReader.next();
-                    if (xmlReader.isStartElement()){
-                        if (xmlReader.getLocalName().equals("student")){
-                            studSurname = xmlReader.getAttributeValue(null, ParserConsts.STUDSURNAME);
-                            studFirName = xmlReader.getAttributeValue(null,ParserConsts.STUDFNAME);
-                            studSecName = xmlReader.getAttributeValue(null, ParserConsts.STUDSNAME);
-                            dadSurname = xmlReader.getAttributeValue(null,ParserConsts.DADSURNAME);
-                            dadFirName = xmlReader.getAttributeValue(null,ParserConsts.DADFNAME);
-                            dadSecName = xmlReader.getAttributeValue(null,ParserConsts.DADSNAME);
-                            dadSalary = xmlReader.getAttributeValue(null,ParserConsts.DADSALARY);
-                            mumSurname = xmlReader.getAttributeValue(null,ParserConsts.MUMSURNAME);
-                            mumFirName = xmlReader.getAttributeValue(null,ParserConsts.MUMFNAME);
-                            mumSecName = xmlReader.getAttributeValue(null,ParserConsts.MUMSNAME);
-                            mumSalary = xmlReader.getAttributeValue(null,ParserConsts.MUMSALARY);
-                            brotherNum = xmlReader.getAttributeValue(null,ParserConsts.BROTHNUM);
-                            sisterNum = xmlReader.getAttributeValue(null,ParserConsts.SISTNUM);
-                            Parent father = new Parent(dadSurname,dadFirName,dadSecName,Integer.parseInt(dadSalary));
-                            Parent mother = new Parent(mumSurname,mumFirName,mumSecName,Integer.parseInt(mumSalary));
+                DefaultHandler handler = new DefaultHandler() {
 
-                            Student student = new Student(studSurname,studFirName,studSecName, father, mother,
-                                    Integer.parseInt(brotherNum),Integer.parseInt(sisterNum));
-                            dataBase.addStud(student);
-
+                    @Override
+                    public void startElement(String uri, String localName, String qName, Attributes attributes) throws SAXException {
+                        if(qName.equals("student")){
+                            System.out.println("student #");
+                            tempStudent=new Student();
+                        }
+                        if(qName.equals( "dad")){
+                            System.out.println("dad #");
+                            dad = new Parent();
+                            tempStudent.setFather(dad);
+                        }
+                        if(qName.equals("mom")){
+                            System.out.println("mom #");
+                            mom = new Parent();
+                            tempStudent.setMother(mom);
                         }
                     }
-                }
 
+
+                    @Override
+                    public void endElement(String namespaceURI, String localName, String qName) throws SAXException {
+                        switch (qName) {
+                            case "surName":
+                                System.out.println("surName: " + tempData);
+                                tempStudent.setSurName(tempData);
+                                break;
+                            case "firstName":
+                                System.out.println("firstName: " + tempData);
+                                tempStudent.setFirstName(tempData);
+                                break;
+                            case "secName":
+                                System.out.println("secName: " + tempData);
+                                tempStudent.setSecondName(tempData);
+                                break;
+                            case "dadSurName":
+                                System.out.println("dadSurName: " + tempData);
+                                dad.setSurName(tempData);
+
+                                break;
+                            case "dadFirstName":
+                                System.out.println("dadFirstName: " + tempData);
+                                dad.setFirstName(tempData);
+                                break;
+                            case "dadSecName":
+                                System.out.println("dadSecName: " + tempData);
+                                dad.setSecondName(tempData);
+                                break;
+                            case "dadSalary":
+                                System.out.println("dadSalary: " + tempData);
+                                dad.setSalary(Integer.parseInt(tempData));
+                                break;
+
+                            case "momSurName":
+                                System.out.println("momSurName: " + tempData);
+                                mom.setSurName(tempData);
+                                break;
+                            case "momFirstName":
+                                System.out.println("momFirstName: " + tempData);
+                                mom.setFirstName(tempData);
+                                break;
+                            case "momSecName":
+                                System.out.println("momSecName: " + tempData);
+                                mom.setSecondName(tempData);
+                                break;
+                            case "momSalary":
+                                System.out.println("momSalary: " + tempData);
+                                mom.setSalary(Integer.parseInt(tempData));
+                                break;
+                            case "countOfBrothers":
+                                System.out.println("countBrother: " + tempData);
+                                tempStudent.setBrotherNum(Integer.parseInt(tempData));
+                                break;
+                            case "countOfSisters":
+                                System.out.println("countOfSisters: " + tempData);
+                                tempStudent.setSisterNum(Integer.parseInt(tempData));
+                                break;
+                            case "student":
+                                dataBase.addStud(tempStudent);
+                                break;
+                        }
+                    }
+
+                    @Override
+                    public void characters(char ch[], int start, int length) throws SAXException {
+                        tempData=new String(ch,start,length);
+                        if(tempData.equals("")) return;
+
+                    }
+                };
+
+                saxParser.parse(fileName, handler);
+
+            } catch (Exception e) {
+                e.printStackTrace();
             }
-        }catch (Exception e){
-            JOptionPane.showMessageDialog
-                    (null, "Can't open file", "Error:", JOptionPane.ERROR_MESSAGE);
         }
         table.updateTable();
+
     }
-
-    class ParserConsts{
-        static final String STUDSURNAME = "studSurname";
-        static final String STUDFNAME = "studFirName";
-        static final String STUDSNAME = "studSecName";
-
-        static final String DADSURNAME = "dadSurname";
-        static final String DADFNAME = "dadFirName";
-        static final String DADSNAME = "dadSecName";
-        static final String DADSALARY = "dadSalary";
-
-        static final String MUMSURNAME = "mumSurname";
-        static final String MUMFNAME = "mumFirName";
-        static final String MUMSNAME = "mumSecName";
-        static final String MUMSALARY = "mumSalary";
-
-        static final String BROTHNUM = "brotherCount";
-        static final String SISTNUM = "sisterCount";
-    }
-
 }

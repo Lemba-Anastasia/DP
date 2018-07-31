@@ -13,31 +13,27 @@ import java.awt.event.ActionListener;
  */
 public class ToolBar
 {
-    private DataBase dataBase;
     public JToolBar toolBar;
-    private View view;
     private MainController controller;
 
 
     public ToolBar(final DataBase dataBase, final View view){
 
-        this.dataBase=dataBase;
-        this.view=view;
         controller=new MainController(dataBase);
         ImageIcon addSudentIcon = new ImageIcon("src\\com\\company\\images\\addStudentIcon.png");
         JButton addStudent = new JButton(addSudentIcon);
 
-        ImageIcon deleteSudentIcon = new ImageIcon("src\\com\\company\\images\\deleteStudentIcon.png");
-        JButton deleteStudent = new JButton(deleteSudentIcon);
+        ImageIcon deleteSudentIcon2 = new ImageIcon("src\\com\\company\\images\\deleteStudentIcon.png");
+        JButton deleteStudent2 = new JButton(deleteSudentIcon2);
 
-        ImageIcon searchSudentIcon = new ImageIcon("src\\com\\company\\images\\searchStudentIcon.png");
-        final JButton searchStudent = new JButton(searchSudentIcon);
+        ImageIcon searchSudentIcon2 = new ImageIcon("src\\com\\company\\images\\searchStudentIcon.png");
+        final JButton searchStudent2 = new JButton(searchSudentIcon2);
 
 
         toolBar = new JToolBar();
         toolBar.add(addStudent);
-        toolBar.add(deleteStudent);
-        toolBar.add(searchStudent);
+        toolBar.add(deleteStudent2);
+        toolBar.add(searchStudent2);
 
 
         addStudent.addActionListener(new ActionListener() {
@@ -49,19 +45,21 @@ public class ToolBar
                 add.setLocationRelativeTo(null);
             }
         });
-        deleteStudent.addActionListener(new ActionListener() {
+
+        deleteStudent2.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                JDialog add = new DeleteDialog(controller,view ).getDialog();
+                JDialog add = new DeleteStudentDialog(controller,view ).getDialog();
                 add.setSize(330,500);
                 add.setVisible(true);
                 add.setLocationRelativeTo(null);
             }
         });
-        searchStudent.addActionListener(new ActionListener() {
+
+        searchStudent2.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                JDialog searchDialog = new SearchStudentDialog(controller).getDialog();
+                JDialog searchDialog = new SearchStudentDialog(controller).getSeachDialog();
                 searchDialog.setBounds(200, 100, 900, 500);
                 searchDialog.setVisible(true);
             }
